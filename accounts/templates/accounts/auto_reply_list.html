@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Replies | BizPilot</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0b1220;
+            --panel: #111d30;
+            --teal: #12bfae;
+            --teal-light: #52e5d0;
+            --text: #f4f7fc;
+            --muted: #91a1b8;
+            --border: #29394f;
+            --card: #142238;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 255px;
+            min-height: 100vh;
+            background: #0e192b;
+            border-right: 1px solid var(--border);
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 5px 5px 55px;
+            color: white;
+            text-shadow: 2px 3px 0 #52647b, 4px 5px 8px #000;
+        }
+
+        .logo span {
+            color: var(--teal);
+            text-shadow: 2px 3px 0 #087b74, 4px 5px 8px #000;
+        }
+
+        .nav-heading {
+            color: #71869e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin: 0 12px 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: #b7c4d5;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(110deg, #0d827b, #125b61);
+            color: white;
+            box-shadow: 0 5px 15px #0d827b22;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
+            flex-shrink: 0;
+        }
+
+        .nav-section {
+            margin-top: 30px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px 42px;
+            background:
+                radial-gradient(circle at 95% 5%, #0b625b22, transparent 28%),
+                var(--navy);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: var(--teal-light);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #17263b;
+            color: white;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .logout-btn:hover {
+            background: #b83245;
+            border-color: #b83245;
+        }
+
+        /* SECTION */
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .add-btn {
+            display: inline-block;
+            padding: 15px 23px;
+            background: linear-gradient(110deg, var(--teal), var(--teal-light));
+            color: #07151c;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
+            transition: .25s;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* TABLE */
+
+        .table-container {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 17px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        td {
+            color: var(--text);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .message {
+            max-width: 300px;
+            color: var(--muted);
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .active-status {
+            background: #0d665f44;
+            color: var(--teal-light);
+        }
+
+        .inactive-status {
+            background: #49252d;
+            color: #ff8d9c;
+        }
+
+        /* ACTIONS */
+
+        .action-link {
+            display: inline-block;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 5px;
+            transition: .2s;
+        }
+
+        .edit-link {
+            background: #173d53;
+            color: #70d5f5;
+        }
+
+        .edit-link:hover {
+            background: #20536f;
+        }
+
+        .delete-link {
+            background: #49252d;
+            color: #ff8d9c;
+        }
+
+        .delete-link:hover {
+            background: #71313d;
+        }
+
+        /* EMPTY STATE */
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 65px 20px;
+            background: var(--card);
+            border: 1px dashed #34475f;
+            border-radius: 15px;
+            color: var(--muted);
+        }
+
+        .empty-state h3 {
+            color: white;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .empty-state p {
+            margin-bottom: 22px;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 950px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                padding: 28px 24px;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 18px;
+            }
+
+            .logo {
+                margin: 0 0 20px;
+            }
+
+            .nav-heading,
+            .nav-section,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main {
+                padding: 25px 17px;
+            }
+
+            .topbar {
+                margin-bottom: 30px;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    
+/* BizPilot responsive navigation and mobile layout */
+@media (max-width: 768px) {
+ html, body { width:100%; max-width:100%; overflow-x:hidden; }
+ .layout { display:block !important; width:100%; min-height:100vh; overflow-x:hidden; }
+ .sidebar { display:none !important; position:fixed !important; z-index:10020 !important; inset:0 auto 0 0 !important; width:min(290px,86vw) !important; height:100dvh !important; min-height:100dvh !important; overflow-y:auto !important; padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42); border-right:1px solid var(--border,#29394f); }
+ .layout.mobile-nav-open .sidebar { display:flex !important; }
+ .sidebar .nav-heading,.sidebar .nav-section,.sidebar .sidebar-bottom { display:block !important; }
+ .sidebar .logo { margin:4px 5px 28px !important; }
+ .mobile-nav-toggle { display:inline-flex !important; position:fixed; z-index:10030; top:12px; left:12px; width:44px; height:44px; align-items:center; justify-content:center; border:1px solid #2b5264; border-radius:12px; background:#111d30; color:#52e5d0; font-size:23px; line-height:1; box-shadow:0 6px 20px rgba(0,0,0,.28); cursor:pointer; }
+ .mobile-nav-backdrop { display:none; position:fixed; z-index:10010; inset:0; background:rgba(2,8,18,.62); }
+ .layout.mobile-nav-open .mobile-nav-backdrop { display:block; }
+ .main { width:100% !important; min-width:0 !important; max-width:100% !important; margin:0 !important; padding:72px 15px 28px !important; overflow-x:hidden; }
+ .topbar { gap:12px; flex-wrap:wrap; margin-bottom:24px !important; }
+ .page-title { font-size:clamp(22px,6vw,28px) !important; }
+ .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px !important; }
+ .stat-card { min-width:0; padding:17px !important; }
+ .toolbar { display:flex !important; flex-direction:column !important; width:100%; gap:10px !important; }
+ .toolbar input,.toolbar select,.toolbar button,input,select,textarea { max-width:100%; }
+ .section-heading { gap:12px; }
+ .table-responsive,.table-scroll,.table-container { width:100%; max-width:100%; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+ table { min-width:720px; }
+ img,canvas,video { max-width:100%; height:auto; }
+ .main > * { max-width:100%; }
+}
+@media (max-width:420px) { .stats-grid { grid-template-columns:1fr !important; } .main { padding-left:12px !important; padding-right:12px !important; } .stat-card { padding:15px !important; } }
+@media (min-width:769px) { .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; } }
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+<button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<div class="mobile-nav-backdrop" aria-hidden="true"></div>
+
+    
+
+    <aside class="sidebar">
+
+        <div class="logo">Biz<span>Pilot.</span></div>
+
+        <div class="nav-heading">WORKSPACE</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <span class="nav-icon">⌂</span>
+            Overview
+        </a>
+
+        <a href="{% url 'business_list' %}" class="nav-link">
+            <span class="nav-icon">▦</span>
+            My Businesses
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="nav-link">
+            <span class="nav-icon">♟</span>
+            Customers
+        </a>
+
+        <a href="{% url 'lead_list' %}" class="nav-link">
+            <span class="nav-icon">◇</span>
+            Leads
+        </a>
+
+        <div class="nav-section">
+
+            <div class="nav-heading">MANAGEMENT</div>
+
+            <a href="{% url 'product_list' %}" class="nav-link">
+                <span class="nav-icon">▣</span>
+                Products
+            </a>
+            <a href="{% url 'ai_chatbot' %}" class="nav-link"><span class="nav-icon">✦</span> AI Assistant</a>
+
+            <a href="{% url 'brand_list' %}" class="nav-link">
+                <span class="nav-icon">✧</span>
+                Brand Setup
+            </a>
+
+            <a href="{% url 'automation' %}" class="nav-link">
+                <span class="nav-icon">◷</span>
+                Automation
+            </a>
+
+            <a href="{% url 'auto_reply_list' %}" class="nav-link active">
+                <span class="nav-icon">✉</span>
+                Auto Replies
+            </a>
+
+            <a href="{% url 'analytics' %}" class="nav-link">
+                <span class="nav-icon">▥</span>
+                Analytics
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="nav-link">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+    
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div>
+                <div class="eyebrow">BUSINESS WORKSPACE</div>
+                <h1 class="page-title">Auto Replies</h1>
+            </div>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Manage Your Auto Replies</h2>
+                <p>Create and manage automatic response messages for customer enquiries.</p>
+            </div>
+
+            <a href="{% url 'add_auto_reply' %}" class="add-btn">
+                + Create Reply
+            </a>
+
+        </div>
+
+        
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Business</th>
+                        <th>Trigger</th>
+                        <th>Reply Message</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for reply in auto_replies %}
+
+                    <tr>
+                        <td>{{ reply.business.name }}</td>
+
+                        <td>{{ reply.get_trigger_display }}</td>
+
+                        <td class="message">
+                            {{ reply.message|truncatechars:90 }}
+                        </td>
+
+                        <td>
+                            {% if reply.is_active %}
+                                <span class="status active-status">Active</span>
+                            {% else %}
+                                <span class="status inactive-status">Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a href="{% url 'edit_auto_reply' reply.id %}" class="action-link edit-link">
+                                Edit
+                            </a>
+
+                            <a href="{% url 'delete_auto_reply' reply.id %}" class="action-link delete-link">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <h3>No Automatic Replies Yet</h3>
+                                <p>Create your first automatic reply to get started.</p>
+
+                                <a href="{% url 'add_auto_reply' %}" class="add-btn">
+                                    + Create Your First Reply
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

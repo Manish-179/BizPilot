@@ -1,0 +1,680 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Lead | BizPilot</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0b1220;
+            --panel: #111d30;
+            --teal: #12bfae;
+            --teal-light: #52e5d0;
+            --text: #f4f7fc;
+            --muted: #91a1b8;
+            --border: #29394f;
+            --card: #142238;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 255px;
+            background: #0e192b;
+            border-right: 1px solid var(--border);
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 5px 5px 55px;
+            color: white;
+            text-shadow: 2px 3px 0 #52647b, 4px 5px 8px #000;
+        }
+
+        .logo span {
+            color: var(--teal);
+            text-shadow: 2px 3px 0 #087b72, 4px 5px 8px #000;
+        }
+
+        .nav-heading {
+            color: #71869e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin: 0 12px 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: #b7c4d5;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: linear-gradient(110deg, #0d827b, #125b61);
+            box-shadow: 0 5px 18px #0cb9a322;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
+        }
+
+        .nav-section {
+            margin-top: 30px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .logout-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #17263b;
+            color: white;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: .25s;
+        }
+
+        .logout-btn:hover {
+            background: #b83245;
+            border-color: #b83245;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px 42px;
+            background:
+                radial-gradient(circle at 95% 5%, #0b625b22, transparent 28%),
+                var(--navy);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: var(--teal-light);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .form-card {
+            max-width: 900px;
+            background: linear-gradient(145deg, #172940, #111d30);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #dce6f3;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 15px;
+            background: #0f1b2e;
+            color: white;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px #12bfae18;
+        }
+
+        select option {
+            background: var(--panel);
+            color: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #71869e;
+        }
+
+        /* International phone input */
+
+        .phone-input {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .phone-input select {
+            width: 125px;
+            flex-shrink: 0;
+            border-radius: 9px 0 0 9px;
+            border-right: none;
+            padding: 14px 8px;
+            color: var(--teal-light);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .phone-input input {
+            flex: 1;
+            min-width: 0;
+            border-radius: 0 9px 9px 0;
+        }
+
+        .helptext {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .errorlist {
+            color: #ff7c8c;
+            font-size: 12px;
+            list-style: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .submit-btn {
+            padding: 13px 24px;
+            background: linear-gradient(110deg, var(--teal), var(--teal-light));
+            color: #061b1a;
+            border: none;
+            border-radius: 9px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px #12bfae55;
+        }
+
+        .cancel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 24px;
+            background: #17263b;
+            color: white;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .cancel-btn:hover {
+            background: #20344e;
+        }
+
+        @media(max-width: 950px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                padding: 28px 24px;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 18px;
+            }
+
+            .logo {
+                margin: 0 0 20px;
+            }
+
+            .nav-heading,
+            .nav-section,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main {
+                padding: 25px 17px;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .topbar {
+                margin-bottom: 30px;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+
+            .form-actions {
+                flex-wrap: wrap;
+            }
+
+            .phone-input select {
+                width: 115px;
+            }
+        }
+    
+/* BizPilot responsive navigation and mobile layout */
+@media (max-width: 768px) {
+ html, body { width:100%; max-width:100%; overflow-x:hidden; }
+ .layout { display:block !important; width:100%; min-height:100vh; overflow-x:hidden; }
+ .sidebar { display:none !important; position:fixed !important; z-index:10020 !important; inset:0 auto 0 0 !important; width:min(290px,86vw) !important; height:100dvh !important; min-height:100dvh !important; overflow-y:auto !important; padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42); border-right:1px solid var(--border,#29394f); }
+ .layout.mobile-nav-open .sidebar { display:flex !important; }
+ .sidebar .nav-heading,.sidebar .nav-section,.sidebar .sidebar-bottom { display:block !important; }
+ .sidebar .logo { margin:4px 5px 28px !important; }
+ .mobile-nav-toggle { display:inline-flex !important; position:fixed; z-index:10030; top:12px; left:12px; width:44px; height:44px; align-items:center; justify-content:center; border:1px solid #2b5264; border-radius:12px; background:#111d30; color:#52e5d0; font-size:23px; line-height:1; box-shadow:0 6px 20px rgba(0,0,0,.28); cursor:pointer; }
+ .mobile-nav-backdrop { display:none; position:fixed; z-index:10010; inset:0; background:rgba(2,8,18,.62); }
+ .layout.mobile-nav-open .mobile-nav-backdrop { display:block; }
+ .main { width:100% !important; min-width:0 !important; max-width:100% !important; margin:0 !important; padding:72px 15px 28px !important; overflow-x:hidden; }
+ .topbar { gap:12px; flex-wrap:wrap; margin-bottom:24px !important; }
+ .page-title { font-size:clamp(22px,6vw,28px) !important; }
+ .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px !important; }
+ .stat-card { min-width:0; padding:17px !important; }
+ .toolbar { display:flex !important; flex-direction:column !important; width:100%; gap:10px !important; }
+ .toolbar input,.toolbar select,.toolbar button,input,select,textarea { max-width:100%; }
+ .section-heading { gap:12px; }
+ .table-responsive,.table-scroll,.table-container { width:100%; max-width:100%; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+ table { min-width:720px; }
+ img,canvas,video { max-width:100%; height:auto; }
+ .main > * { max-width:100%; }
+}
+@media (max-width:420px) { .stats-grid { grid-template-columns:1fr !important; } .main { padding-left:12px !important; padding-right:12px !important; } .stat-card { padding:15px !important; } }
+@media (min-width:769px) { .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; } }
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+<button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<div class="mobile-nav-backdrop" aria-hidden="true"></div>
+
+    
+    <aside class="sidebar">
+
+        <div class="logo">Biz<span>Pilot.</span></div>
+
+        <div class="nav-heading">WORKSPACE</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <span class="nav-icon">⌂</span> Overview
+        </a>
+
+        <a href="{% url 'business_list' %}" class="nav-link">
+            <span class="nav-icon">▦</span> My Businesses
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="nav-link">
+            <span class="nav-icon">♙</span> Customers
+        </a>
+
+        <a href="{% url 'lead_list' %}" class="nav-link active">
+            <span class="nav-icon">◈</span> Leads
+        </a>
+
+        <div class="nav-section">
+
+            <div class="nav-heading">MANAGEMENT</div>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▣</span> Products
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▥</span> Analytics
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span> Settings
+            </a>
+
+        </div>
+
+        
+            <a href="{% url 'ai_chatbot' %}" class="nav-link"><span class="nav-icon">✦</span> AI Assistant</a>
+        <div class="sidebar-bottom">
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn" style="width:100%">
+                    ↪ Logout
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <div class="eyebrow">BUSINESS WORKSPACE</div>
+                <h1 class="page-title">Edit Lead</h1>
+            </div>
+
+            <a href="{% url 'lead_list' %}" class="cancel-btn">
+                Back to Leads
+            </a>
+
+        </header>
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Update Lead Information</h2>
+            </div>
+
+            <div class="form-card">
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+
+                        {% for field in form %}
+
+                            <div class="form-group {% if field.name == 'notes' %}full{% endif %}">
+
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+
+                                {% if field.name == 'phone' %}
+
+                                    <div class="phone-input">
+
+                                        <select name="country_code" id="country_code">
+
+                                            <option value="+91" {% if selected_country_code == '+91' %}selected{% endif %}>🇮🇳 +91</option>
+                                            <option value="+1" {% if selected_country_code == '+1' %}selected{% endif %}>🇺🇸 +1</option>
+                                            <option value="+44" {% if selected_country_code == '+44' %}selected{% endif %}>🇬🇧 +44</option>
+                                            <option value="+971" {% if selected_country_code == '+971' %}selected{% endif %}>🇦🇪 +971</option>
+                                            <option value="+61" {% if selected_country_code == '+61' %}selected{% endif %}>🇦🇺 +61</option>
+                                            <option value="+92" {% if selected_country_code == '+92' %}selected{% endif %}>🇵🇰 +92</option>
+                                            <option value="+880" {% if selected_country_code == '+880' %}selected{% endif %}>🇧🇩 +880</option>
+                                            <option value="+977" {% if selected_country_code == '+977' %}selected{% endif %}>🇳🇵 +977</option>
+                                            <option value="+94" {% if selected_country_code == '+94' %}selected{% endif %}>🇱🇰 +94</option>
+                                            <option value="+81" {% if selected_country_code == '+81' %}selected{% endif %}>🇯🇵 +81</option>
+                                            <option value="+86" {% if selected_country_code == '+86' %}selected{% endif %}>🇨🇳 +86</option>
+                                            <option value="+49" {% if selected_country_code == '+49' %}selected{% endif %}>🇩🇪 +49</option>
+                                            <option value="+33" {% if selected_country_code == '+33' %}selected{% endif %}>🇫🇷 +33</option>
+                                            <option value="+39" {% if selected_country_code == '+39' %}selected{% endif %}>🇮🇹 +39</option>
+                                            <option value="+34" {% if selected_country_code == '+34' %}selected{% endif %}>🇪🇸 +34</option>
+                                            <option value="+7" {% if selected_country_code == '+7' %}selected{% endif %}>🇷🇺 +7</option>
+                                            <option value="+55" {% if selected_country_code == '+55' %}selected{% endif %}>🇧🇷 +55</option>
+                                            <option value="+27" {% if selected_country_code == '+27' %}selected{% endif %}>🇿🇦 +27</option>
+                                            <option value="+966" {% if selected_country_code == '+966' %}selected{% endif %}>🇸🇦 +966</option>
+                                            <option value="+974" {% if selected_country_code == '+974' %}selected{% endif %}>🇶🇦 +974</option>
+                                            <option value="+965" {% if selected_country_code == '+965' %}selected{% endif %}>🇰🇼 +965</option>
+                                            <option value="+968" {% if selected_country_code == '+968' %}selected{% endif %}>🇴🇲 +968</option>
+                                            <option value="+60" {% if selected_country_code == '+60' %}selected{% endif %}>🇲🇾 +60</option>
+                                            <option value="+65" {% if selected_country_code == '+65' %}selected{% endif %}>🇸🇬 +65</option>
+                                            <option value="+66" {% if selected_country_code == '+66' %}selected{% endif %}>🇹🇭 +66</option>
+                                            <option value="+62" {% if selected_country_code == '+62' %}selected{% endif %}>🇮🇩 +62</option>
+                                            <option value="+63" {% if selected_country_code == '+63' %}selected{% endif %}>🇵🇭 +63</option>
+                                            <option value="+84" {% if selected_country_code == '+84' %}selected{% endif %}>🇻🇳 +84</option>
+                                            <option value="+82" {% if selected_country_code == '+82' %}selected{% endif %}>🇰🇷 +82</option>
+                                            <option value="+90" {% if selected_country_code == '+90' %}selected{% endif %}>🇹🇷 +90</option>
+                                            <option value="+20" {% if selected_country_code == '+20' %}selected{% endif %}>🇪🇬 +20</option>
+                                            <option value="+234" {% if selected_country_code == '+234' %}selected{% endif %}>🇳🇬 +234</option>
+                                            <option value="+254" {% if selected_country_code == '+254' %}selected{% endif %}>🇰🇪 +254</option>
+                                            <option value="+353" {% if selected_country_code == '+353' %}selected{% endif %}>🇮🇪 +353</option>
+                                            <option value="+31" {% if selected_country_code == '+31' %}selected{% endif %}>🇳🇱 +31</option>
+                                            <option value="+41" {% if selected_country_code == '+41' %}selected{% endif %}>🇨🇭 +41</option>
+                                            <option value="+46" {% if selected_country_code == '+46' %}selected{% endif %}>🇸🇪 +46</option>
+                                            <option value="+47" {% if selected_country_code == '+47' %}selected{% endif %}>🇳🇴 +47</option>
+                                            <option value="+48" {% if selected_country_code == '+48' %}selected{% endif %}>🇵🇱 +48</option>
+                                            <option value="+351" {% if selected_country_code == '+351' %}selected{% endif %}>🇵🇹 +351</option>
+                                            <option value="+52" {% if selected_country_code == '+52' %}selected{% endif %}>🇲🇽 +52</option>
+                                            <option value="+64" {% if selected_country_code == '+64' %}selected{% endif %}>🇳🇿 +64</option>
+
+                                        </select>
+
+                                        {{ field }}
+
+                                    </div>
+
+                                {% else %}
+
+                                    {{ field }}
+
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <span class="helptext">{{ field.help_text }}</span>
+                                {% endif %}
+
+                                {{ field.errors }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="submit" class="submit-btn">
+                            Save Changes
+                        </button>
+
+                        <a href="{% url 'lead_list' %}" class="cancel-btn">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

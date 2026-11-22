@@ -1,0 +1,844 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant | BizPilot</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0b1220;
+            --panel: #111d30;
+            --teal: #12bfae;
+            --teal-light: #52e5d0;
+            --text: #f4f7fc;
+            --muted: #91a1b8;
+            --border: #29394f;
+            --card: #142238;
+            --sidebar: #0e192b;
+            --accent: #12bfae;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+            background: var(--navy);
+            color: var(--text);
+            --teal: var(--accent);
+            --teal-light: var(--accent);
+        }
+
+        .layout[data-theme="light"] {
+            --navy: #f1f5f9;
+            --panel: #ffffff;
+            --text: #172337;
+            --muted: #64748b;
+            --border: #dce4ed;
+            --card: #ffffff;
+            --sidebar: #ffffff;
+        }
+
+        .sidebar {
+            width: 255px;
+            min-height: 100vh;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 5px 5px 55px;
+            color: var(--text);
+            text-shadow: 2px 3px 0 #52647b, 4px 5px 8px #000;
+        }
+
+        .logo span {
+            color: var(--accent);
+            text-shadow: 2px 3px 0 #087b74, 4px 5px 8px #000;
+        }
+
+        .nav-heading {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin: 0 12px 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: var(--muted);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: color-mix(in srgb, var(--accent) 22%, transparent);
+            color: var(--text);
+            box-shadow: 0 5px 15px color-mix(in srgb, var(--accent) 12%, transparent);
+        }
+
+        .nav-link.active {
+            border-left: 3px solid var(--accent);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
+            flex-shrink: 0;
+        }
+
+        .nav-section {
+            margin-top: 30px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            color: var(--muted);
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .logout-btn:hover {
+            background: #b8324522;
+            color: #ff737d;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px 42px;
+            background:
+                radial-gradient(
+                    circle at 95% 5%,
+                    color-mix(in srgb, var(--accent) 10%, transparent),
+                    transparent 28%
+                ),
+                var(--navy);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--text);
+        }
+
+        .section-heading {
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-top: 9px;
+        }
+
+        .ai-card {
+            max-width: 850px;
+            background: linear-gradient(145deg, var(--card), var(--panel));
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 17px;
+            background: var(--navy);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            transition: .25s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+        }
+
+        textarea.form-control {
+            min-height: 145px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-control::placeholder {
+            color: var(--muted);
+        }
+
+        .primary-btn {
+            display: inline-block;
+            padding: 15px 24px;
+            background: var(--accent);
+            color: #07151c;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+
+        .primary-btn:disabled {
+            opacity: .6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .answer-card {
+            margin-top: 28px;
+            padding: 25px;
+            background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+            border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--border));
+            border-radius: 15px;
+        }
+
+        .answer-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .answer-heading h3 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .answer-icon {
+            color: var(--accent);
+            font-size: 22px;
+        }
+
+        .answer-text {
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .answer-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            padding: 13px 20px;
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .error-message {
+            margin-top: 20px;
+            padding: 15px;
+            background: #b8324522;
+            border: 1px solid #b8324555;
+            border-radius: 10px;
+            color: #ff858f;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .empty-message {
+            padding: 20px;
+            color: var(--muted);
+            background: var(--card);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .note {
+            margin-top: 22px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .layout[data-theme="light"] .logo,
+        .layout[data-theme="light"] .logo span {
+            text-shadow: none;
+        }
+
+        @media(max-width: 950px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                padding: 28px 24px;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 18px;
+            }
+
+            .logo {
+                margin: 0 0 20px;
+            }
+
+            .nav-heading,
+            .nav-section,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main {
+                padding: 25px 17px;
+            }
+
+            .topbar {
+                margin-bottom: 30px;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+
+            .ai-card {
+                padding: 20px;
+            }
+
+            .answer-actions {
+                flex-direction: column;
+            }
+
+            .answer-actions button {
+                width: 100%;
+            }
+        }
+    
+/* BizPilot responsive navigation and mobile layout */
+@media (max-width: 768px) {
+ html,body{width:100%;max-width:100%;overflow-x:hidden}
+ .layout{display:block!important;width:100%;min-height:100vh;overflow-x:hidden}
+ .sidebar{display:none!important;position:fixed!important;z-index:10020!important;inset:0 auto 0 0!important;width:min(290px,86vw)!important;height:100dvh!important;min-height:100dvh!important;overflow-y:auto!important;padding:24px 16px 30px!important;box-shadow:18px 0 45px rgba(0,0,0,.42);border-right:1px solid var(--border,#29394f)}
+ .layout.mobile-nav-open .sidebar{display:flex!important}
+ .sidebar .nav-heading,.sidebar .nav-section,.sidebar .sidebar-bottom{display:block!important}
+ .sidebar .logo{margin:4px 5px 28px!important}
+ .mobile-nav-toggle{display:inline-flex!important;position:fixed;z-index:10030;top:12px;left:12px;width:44px;height:44px;align-items:center;justify-content:center;border:1px solid #2b5264;border-radius:12px;background:#111d30;color:#52e5d0;font-size:23px;line-height:1;box-shadow:0 6px 20px rgba(0,0,0,.28);cursor:pointer}
+ .mobile-nav-backdrop{display:none;position:fixed;z-index:10010;inset:0;background:rgba(2,8,18,.62)}
+ .layout.mobile-nav-open .mobile-nav-backdrop{display:block}
+ .main{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;padding:72px 15px 28px!important;overflow-x:hidden}
+ .topbar{gap:12px;flex-wrap:wrap;margin-bottom:24px!important}
+ .page-title{font-size:clamp(22px,6vw,28px)!important}
+ .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+ .stat-card{min-width:0;padding:17px!important}
+ .toolbar{display:flex!important;flex-direction:column!important;width:100%;gap:10px!important}
+ .toolbar input,.toolbar select,.toolbar button,input,select,textarea{max-width:100%}
+ .section-heading{gap:12px}
+ .mobile-table-scroll{width:100%;max-width:100%;overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+ .mobile-table-scroll table{min-width:720px}
+ img,canvas,video{max-width:100%;height:auto}
+ .main>*{max-width:100%}
+}
+@media(max-width:420px){.stats-grid{grid-template-columns:1fr!important}.main{padding-left:12px!important;padding-right:12px!important}.stat-card{padding:15px!important}}
+@media(min-width:769px){.mobile-nav-toggle,.mobile-nav-backdrop{display:none!important}}
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layout"
+     data-theme="{{ user_settings.theme|default:'dark' }}"
+     style="--accent: {{ user_settings.accent_color|default:'#12bfae' }};">
+
+    <button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<div class="mobile-nav-backdrop" aria-hidden="true"></div>
+<aside class="sidebar">
+
+        <div class="logo">Biz<span>Pilot.</span></div>
+
+        <div class="nav-heading">WORKSPACE</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <span class="nav-icon">⌂</span>
+            Overview
+        </a>
+
+        <a href="{% url 'business_list' %}" class="nav-link">
+            <span class="nav-icon">▦</span>
+            My Businesses
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="nav-link">
+            <span class="nav-icon">♟</span>
+            Customers
+        </a>
+
+        <a href="{% url 'lead_list' %}" class="nav-link">
+            <span class="nav-icon">◇</span>
+            Leads
+        </a>
+
+        <div class="nav-section">
+
+            <div class="nav-heading">MANAGEMENT</div>
+
+            <a href="{% url 'product_list' %}" class="nav-link">
+                <span class="nav-icon">▣</span>
+                Products
+            </a>
+
+            <a href="{% url 'ai_chatbot' %}" class="nav-link active">
+                <span class="nav-icon">✦</span>
+                AI Assistant
+            </a>
+
+            <a href="{% url 'brand_list' %}" class="nav-link">
+                <span class="nav-icon">✧</span>
+                Brand Setup
+            </a>
+
+            <a href="{% url 'automation' %}" class="nav-link">
+                <span class="nav-icon">◷</span>
+                Automation
+            </a>
+
+            <a href="{% url 'auto_reply_list' %}" class="nav-link">
+                <span class="nav-icon">✉</span>
+                Auto Replies
+            </a>
+
+            <a href="{% url 'analytics' %}" class="nav-link">
+                <span class="nav-icon">▥</span>
+                Analytics
+            </a>
+
+            <a href="{% url 'settings' %}" class="nav-link">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <form method="POST" action="{% url 'logout' %}" class="logout-form">
+                {% csrf_token %}
+
+                <button type="submit" class="logout-btn">
+                    <span class="nav-icon">↪</span>
+                    Logout
+                </button>
+            </form>
+
+        </div>
+
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <div class="eyebrow">GEMINI POWERED</div>
+                <h1 class="page-title">AI Assistant</h1>
+            </div>
+        </div>
+
+        <div class="section-heading">
+            <h2>Smart Customer Support</h2>
+            <p>
+                Generate intelligent customer replies using your business
+                information and published products.
+            </p>
+        </div>
+
+        <section class="ai-card">
+
+            <p class="section-heading">
+                <p>
+                    Choose one of your businesses and enter a customer question.
+                    BizPilot uses its business details and published products to
+                    draft a reply. Review the response before sending it to a customer.
+                </p>
+            </p>
+
+            {% if businesses %}
+
+                <form method="POST" id="aiForm">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+
+                        <label for="business">Business</label>
+
+                        <select name="business" id="business" class="form-control" required>
+
+                            {% for business in businesses %}
+
+                                <option value="{{ business.id }}"
+                                    {% if selected_business and selected_business.id == business.id %}selected{% endif %}>
+                                    {{ business.name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="question">Customer question</label>
+
+                        <textarea
+                            name="question"
+                            id="question"
+                            class="form-control"
+                            maxlength="1200"
+                            placeholder="Example: Do you have this product available and what is its price?"
+                            required>{{ question }}</textarea>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn" id="generateButton">
+                        ✦ Generate reply
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <div class="empty-message">
+                    You haven't added any businesses yet.
+                    Add your first business to start using the AI Assistant.
+                    <br><br>
+                    <a href="{% url 'add_business' %}" class="primary-btn">
+                        + Add Business
+                    </a>
+                </div>
+
+            {% endif %}
+
+            {% if error %}
+
+                <div class="error-message">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+            {% if answer %}
+
+                <div class="answer-card">
+
+                    <div class="answer-heading">
+                        <span class="answer-icon">✦</span>
+                        <h3>Suggested Reply</h3>
+                    </div>
+
+                    <div class="answer-text" id="replyText">{{ answer }}</div>
+
+                    <div class="answer-actions">
+
+                        <button type="button" class="primary-btn" onclick="copyReply()">
+                            ▣ Copy Reply
+                        </button>
+
+                        <form method="POST" id="regenerateForm">
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="business"
+                                value="{{ selected_business.id }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="question"
+                                value="{{ question }}"
+                            >
+
+                            <button type="submit" class="secondary-btn">
+                                ↻ Regenerate Reply
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+            <p class="note">
+                AI-generated content can be inaccurate. Verify prices,
+                availability and policies before sharing. Do not enter
+                passwords, payment details or sensitive customer information.
+            </p>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    function copyReply() {
+        const reply = document.getElementById("replyText");
+
+        if (!reply) {
+            return;
+        }
+
+        const text = reply.innerText;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .then(() => alert("Reply copied successfully!"))
+                .catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+            document.execCommand("copy");
+            alert("Reply copied successfully!");
+        } catch (error) {
+            alert("Unable to copy. Please select and copy the reply manually.");
+        }
+
+        textarea.remove();
+    }
+
+    const aiForm = document.getElementById("aiForm");
+
+    if (aiForm) {
+        aiForm.addEventListener("submit", function () {
+            const button = document.getElementById("generateButton");
+
+            button.disabled = true;
+            button.textContent = "✦ Generating reply...";
+        });
+    }
+
+    const regenerateForm = document.getElementById("regenerateForm");
+
+    if (regenerateForm) {
+        regenerateForm.addEventListener("submit", function () {
+            const button = regenerateForm.querySelector("button");
+
+            button.disabled = true;
+            button.textContent = "Regenerating...";
+        });
+    }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

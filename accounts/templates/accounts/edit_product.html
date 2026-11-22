@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product | BizPilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0b1220;
+            --teal: #12bfae;
+            --teal-light: #52e5d0;
+            --text: #f4f7fc;
+            --muted: #91a1b8;
+            --border: #29394f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 255px;
+            background: #0e192b;
+            border-right: 1px solid var(--border);
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 5px 5px 55px;
+            color: white;
+            text-shadow: 2px 3px 0 #52647b, 4px 5px 8px #000;
+        }
+
+        .logo span {
+            color: var(--teal);
+            text-shadow: 2px 3px 0 #08766f, 4px 5px 8px #000;
+        }
+
+        .nav-heading {
+            color: #71869e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin: 0 12px 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: #b7c4d5;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(110deg, #0d827b, #125b61);
+            box-shadow: 0 5px 18px #0cb9a322;
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
+        }
+
+        .nav-section {
+            margin-top: 30px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px 42px;
+            background: radial-gradient(circle at 95% 5%, #0b625b22, transparent 28%), var(--navy);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: var(--teal-light);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logout-btn {
+            padding: 12px 22px;
+            background: #17263b;
+            color: white;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .logout-btn:hover {
+            background: #b83245;
+        }
+
+        .section-heading {
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .form-card {
+            max-width: 850px;
+            background: linear-gradient(145deg, #172940, #111d30);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #dce6f3;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px 14px;
+            background: #0b1728;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: white;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--teal);
+        }
+
+        select option {
+            background: #111d30;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            padding: 11px;
+        }
+
+        input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--teal);
+        }
+
+        input[type="checkbox"] + label {
+            color: var(--muted);
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .help-text {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .errorlist {
+            color: #ff8794;
+            font-size: 12px;
+            list-style: none;
+        }
+
+        .current-image {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .submit-btn {
+            padding: 13px 24px;
+            background: linear-gradient(110deg, #0d827b, #12bfae);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            padding: 13px 24px;
+            background: #17263b;
+            color: #dce6f3;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 950px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                padding: 28px 24px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 18px;
+            }
+
+            .logo {
+                margin: 0 0 20px;
+            }
+
+            .nav-heading,
+            .nav-section,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main {
+                padding: 25px 17px;
+            }
+
+            .topbar {
+                margin-bottom: 30px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+    
+/* BizPilot responsive navigation and mobile layout */
+@media (max-width: 768px) {
+ html, body { width:100%; max-width:100%; overflow-x:hidden; }
+ .layout { display:block !important; width:100%; min-height:100vh; overflow-x:hidden; }
+ .sidebar { display:none !important; position:fixed !important; z-index:10020 !important; inset:0 auto 0 0 !important; width:min(290px,86vw) !important; height:100dvh !important; min-height:100dvh !important; overflow-y:auto !important; padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42); border-right:1px solid var(--border,#29394f); }
+ .layout.mobile-nav-open .sidebar { display:flex !important; }
+ .sidebar .nav-heading,.sidebar .nav-section,.sidebar .sidebar-bottom { display:block !important; }
+ .sidebar .logo { margin:4px 5px 28px !important; }
+ .mobile-nav-toggle { display:inline-flex !important; position:fixed; z-index:10030; top:12px; left:12px; width:44px; height:44px; align-items:center; justify-content:center; border:1px solid #2b5264; border-radius:12px; background:#111d30; color:#52e5d0; font-size:23px; line-height:1; box-shadow:0 6px 20px rgba(0,0,0,.28); cursor:pointer; }
+ .mobile-nav-backdrop { display:none; position:fixed; z-index:10010; inset:0; background:rgba(2,8,18,.62); }
+ .layout.mobile-nav-open .mobile-nav-backdrop { display:block; }
+ .main { width:100% !important; min-width:0 !important; max-width:100% !important; margin:0 !important; padding:72px 15px 28px !important; overflow-x:hidden; }
+ .topbar { gap:12px; flex-wrap:wrap; margin-bottom:24px !important; }
+ .page-title { font-size:clamp(22px,6vw,28px) !important; }
+ .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px !important; }
+ .stat-card { min-width:0; padding:17px !important; }
+ .toolbar { display:flex !important; flex-direction:column !important; width:100%; gap:10px !important; }
+ .toolbar input,.toolbar select,.toolbar button,input,select,textarea { max-width:100%; }
+ .section-heading { gap:12px; }
+ .table-responsive,.table-scroll,.table-container { width:100%; max-width:100%; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+ table { min-width:720px; }
+ img,canvas,video { max-width:100%; height:auto; }
+ .main > * { max-width:100%; }
+}
+@media (max-width:420px) { .stats-grid { grid-template-columns:1fr !important; } .main { padding-left:12px !important; padding-right:12px !important; } .stat-card { padding:15px !important; } }
+@media (min-width:769px) { .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; } }
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+<div class="layout">
+<button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<div class="mobile-nav-backdrop" aria-hidden="true"></div>
+
+    <aside class="sidebar">
+        <div class="logo">Biz<span>Pilot</span></div>
+
+        <div class="nav-heading">MAIN MENU</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <span class="nav-icon">▦</span> Overview
+        </a>
+
+        <a href="{% url 'business_list' %}" class="nav-link">
+            <span class="nav-icon">▣</span> My Businesses
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="nav-link">
+            <span class="nav-icon">♙</span> Customers
+        </a>
+
+        <a href="{% url 'lead_list' %}" class="nav-link">
+            <span class="nav-icon">♧</span> Leads
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-heading">MANAGEMENT</div>
+
+            <a href="{% url 'product_list' %}" class="nav-link active">
+                <span class="nav-icon">◈</span> Products
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▤</span> Analytics
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span> Settings
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-link">
+                <span class="nav-icon">ⓘ</span> Help & Support
+            </a>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">PRODUCT MANAGEMENT</div>
+                <h1 class="page-title">Edit Product</h1>
+            </div>
+
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout ↗</button>
+            </form>
+        </header>
+
+        <div class="section-heading">
+            <h2>Update Product Details</h2>
+        </div>
+
+        <div class="form-card">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-grid">
+
+                    {% for field in form %}
+                        <div class="form-group {% if field.name == 'description' %}full-width{% endif %}">
+
+                            {% if field.name == 'image' and product.image %}
+                                <div class="current-image">
+                                    Current image: <a href="{{ product.image.url }}" target="_blank" style="color:var(--teal-light);">View image</a>
+                                </div>
+                            {% endif %}
+
+                            {% if field.field.widget.input_type == 'checkbox' %}
+                                <div class="checkbox-row">
+                                    {{ field }}
+
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                </div>
+                            {% else %}
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.name == 'description' %}
+                                    <button type="button" id="aiDescriptionBtn" class="submit-btn" style="margin-top:10px;width:max-content;">✦ Generate with AI</button>
+                                    <small id="aiDescriptionStatus" style="color:var(--muted);margin-top:6px;"></small>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if field.help_text %}
+                                <span class="help-text">{{ field.help_text }}</span>
+                            {% endif %}
+
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Update Product</button>
+                    <a href="{% url 'product_list' %}" class="cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+    </main>
+</div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

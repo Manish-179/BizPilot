@@ -1,0 +1,906 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation | BizPilot</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0b1220;
+            --panel: #111d30;
+            --teal: #12bfae;
+            --teal-light: #52e5d0;
+            --text: #f4f7fc;
+            --muted: #91a1b8;
+            --border: #29394f;
+            --card: #142238;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 255px;
+            min-height: 100vh;
+            background: #0e192b;
+            border-right: 1px solid var(--border);
+            padding: 30px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            display: block;
+            font-size: 30px;
+            line-height: normal;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 5px 5px 55px;
+            color: white;
+            text-shadow: 2px 3px 0 #52647b, 4px 5px 8px #000;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--teal);
+            text-shadow: 2px 3px 0 #087b74, 4px 5px 8px #000;
+        }
+
+        .nav-heading {
+            color: #71869e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin: 0 12px 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            margin-bottom: 7px;
+            color: #b7c4d5;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .25s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(110deg, #0d827b, #125b61);
+            color: white;
+            box-shadow: 0 5px 15px #0d827b22;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
+            flex-shrink: 0;
+        }
+
+        .nav-section {
+            margin-top: 30px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px 42px;
+            background:
+                radial-gradient(circle at 95% 5%, #0b625b22, transparent 28%),
+                var(--navy);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 42px;
+        }
+
+        .eyebrow {
+            color: var(--teal-light);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #17263b;
+            color: white;
+            border: 1px solid #34475f;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .logout-btn:hover {
+            background: #b83245;
+            border-color: #b83245;
+        }
+
+        /* WELCOME */
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 23px;
+            margin-bottom: 9px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .highlight {
+            color: var(--teal-light);
+        }
+
+        /* SECTION */
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin: 35px 0 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #172940, #111d30);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            transition: .25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: #12bfae66;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card h3 {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--teal-light);
+        }
+
+        /* AUTOMATION CARDS */
+
+        .automation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .automation-card {
+            background: linear-gradient(145deg, #172940, #111d30);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            transition: .25s;
+        }
+
+        .automation-card:hover {
+            transform: translateY(-3px);
+            border-color: #12bfae66;
+        }
+
+        .card-icon {
+            font-size: 25px;
+            color: var(--teal-light);
+            margin-bottom: 18px;
+        }
+
+        .automation-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 13px;
+        }
+
+        .automation-card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: #0d827b33;
+            color: var(--teal-light);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .status:hover {
+            background: #0d827b;
+            color: white;
+        }
+
+        .status.overdue {
+            margin-top: 0;
+            background: #49252d;
+            color: #ff8d9c;
+        }
+
+        .status.upcoming {
+            margin-top: 0;
+            background: #153d3a;
+            color: var(--teal-light);
+        }
+
+        /* FOLLOW-UP TABLE */
+
+        .table-container {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th, td {
+            padding: 17px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        td {
+            color: var(--text);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #17294066;
+        }
+
+        /* CONTACT BUTTONS */
+
+        .contact-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 9px 12px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            transition: .2s;
+        }
+
+        .call-btn {
+            background: #173b54;
+            color: #7bd5ff;
+            border: 1px solid #286080;
+        }
+
+        .call-btn:hover {
+            background: #205575;
+        }
+
+        .whatsapp-btn {
+            background: #123e32;
+            color: #52e5a5;
+            border: 1px solid #237b58;
+        }
+
+        .whatsapp-btn:hover {
+            background: #176044;
+        }
+
+        .complete-btn {
+            background: var(--teal);
+            color: #0b1220;
+            border: none;
+            padding: 9px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            transition: .2s;
+            white-space: nowrap;
+        }
+
+        .complete-btn:hover {
+            background: var(--teal-light);
+        }
+
+        .empty-state {
+            padding: 45px 20px;
+            text-align: center;
+            background: var(--card);
+            border: 1px dashed #40536c;
+            border-radius: 14px;
+        }
+
+        .empty-state h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1100px) {
+            .automation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 950px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                padding: 28px 24px;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 18px;
+            }
+
+            .logo {
+                margin: 0 0 20px;
+            }
+
+            .nav-heading,
+            .nav-section,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main {
+                padding: 25px 17px;
+            }
+
+            .stats-grid,
+            .automation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                margin-bottom: 30px;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+        }
+    
+/* BizPilot responsive navigation and mobile layout */
+@media (max-width: 768px) {
+ html, body { width:100%; max-width:100%; overflow-x:hidden; }
+ .layout { display:block !important; width:100%; min-height:100vh; overflow-x:hidden; }
+ .sidebar { display:none !important; position:fixed !important; z-index:10020 !important; inset:0 auto 0 0 !important; width:min(290px,86vw) !important; height:100dvh !important; min-height:100dvh !important; overflow-y:auto !important; padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42); border-right:1px solid var(--border,#29394f); }
+ .layout.mobile-nav-open .sidebar { display:flex !important; }
+ .sidebar .nav-heading,.sidebar .nav-section,.sidebar .sidebar-bottom { display:block !important; }
+ .sidebar .logo { margin:4px 5px 28px !important; }
+ .mobile-nav-toggle { display:inline-flex !important; position:fixed; z-index:10030; top:12px; left:12px; width:44px; height:44px; align-items:center; justify-content:center; border:1px solid #2b5264; border-radius:12px; background:#111d30; color:#52e5d0; font-size:23px; line-height:1; box-shadow:0 6px 20px rgba(0,0,0,.28); cursor:pointer; }
+ .mobile-nav-backdrop { display:none; position:fixed; z-index:10010; inset:0; background:rgba(2,8,18,.62); }
+ .layout.mobile-nav-open .mobile-nav-backdrop { display:block; }
+ .main { width:100% !important; min-width:0 !important; max-width:100% !important; margin:0 !important; padding:72px 15px 28px !important; overflow-x:hidden; }
+ .topbar { gap:12px; flex-wrap:wrap; margin-bottom:24px !important; }
+ .page-title { font-size:clamp(22px,6vw,28px) !important; }
+ .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px !important; }
+ .stat-card { min-width:0; padding:17px !important; }
+ .toolbar { display:flex !important; flex-direction:column !important; width:100%; gap:10px !important; }
+ .toolbar input,.toolbar select,.toolbar button,input,select,textarea { max-width:100%; }
+ .section-heading { gap:12px; }
+ .table-responsive,.table-scroll,.table-container { width:100%; max-width:100%; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+ table { min-width:720px; }
+ img,canvas,video { max-width:100%; height:auto; }
+ .main > * { max-width:100%; }
+}
+@media (max-width:420px) { .stats-grid { grid-template-columns:1fr !important; } .main { padding-left:12px !important; padding-right:12px !important; } .stat-card { padding:15px !important; } }
+@media (min-width:769px) { .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; } }
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+<button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<div class="mobile-nav-backdrop" aria-hidden="true"></div>
+
+    
+
+    <aside class="sidebar">
+
+        <div class="logo">Biz<span>Pilot.</span></div>
+
+        <div class="nav-heading">WORKSPACE</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <span class="nav-icon">⌂</span>
+            Overview
+        </a>
+
+        <a href="{% url 'business_list' %}" class="nav-link">
+            <span class="nav-icon">▦</span>
+            My Businesses
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="nav-link">
+            <span class="nav-icon">♟</span>
+            Customers
+        </a>
+
+        <a href="{% url 'lead_list' %}" class="nav-link">
+            <span class="nav-icon">◇</span>
+            Leads
+        </a>
+
+        <div class="nav-section">
+
+            <div class="nav-heading">MANAGEMENT</div>
+
+            <a href="{% url 'product_list' %}" class="nav-link">
+                <span class="nav-icon">▣</span>
+                Products
+            </a>
+            <a href="{% url 'ai_chatbot' %}" class="nav-link"><span class="nav-icon">✦</span> AI Assistant</a>
+
+            <a href="{% url 'brand_list' %}" class="nav-link">
+                <span class="nav-icon">✧</span>
+                Brand Setup
+            </a>
+
+            <a href="{% url 'automation' %}" class="nav-link active">
+                <span class="nav-icon">◷</span>
+                Automation
+            </a>
+
+            <a href="{% url 'auto_reply_list' %}" class="nav-link">
+                <span class="nav-icon">✉</span>
+                Auto Replies
+            </a>
+
+            <a href="{% url 'analytics' %}" class="nav-link">
+                <span class="nav-icon">▥</span>
+                Analytics
+            </a>
+
+            <a href="{% url 'settings' %}" class="nav-link">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="nav-link">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+    
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <div class="eyebrow">BUSINESS WORKSPACE</div>
+                <h1 class="page-title">Automation</h1>
+            </div>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </header>
+
+        
+
+        <section class="welcome">
+            <h2>Automate your <span class="highlight">Business</span></h2>
+            <p>Manage customer communication and follow-ups from one place.</p>
+        </section>
+
+        
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Follow-up Overview</h2>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <p>Overdue Follow-ups</p>
+                    <h3>{{ overdue_count }}</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Upcoming Follow-ups</p>
+                    <h3>{{ upcoming_count }}</h3>
+                </div>
+
+            </div>
+
+        </section>
+
+        
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Automation Tools</h2>
+            </div>
+
+            <div class="automation-grid">
+
+                <div class="automation-card">
+                    <div class="card-icon">✉</div>
+                    <h3>Automatic Replies</h3>
+                    <p>
+                        Manage saved responses for customer enquiries
+                        and organize your communication templates.
+                    </p>
+
+                    <a href="{% url 'auto_reply_list' %}" class="status">
+                        Manage Replies →
+                    </a>
+                </div>
+
+                <div class="automation-card">
+                    <div class="card-icon">◷</div>
+                    <h3>Follow-up Reminders</h3>
+                    <p>
+                        Track pending lead follow-ups, identify overdue
+                        reminders and manage customer interactions.
+                    </p>
+
+                    <span class="status">Active</span>
+                </div>
+
+                <div class="automation-card">
+                    <div class="card-icon">☎</div>
+                    <h3>Call Management</h3>
+                    <p>
+                        Contact leads directly from your dashboard
+                        using their saved phone numbers.
+                    </p>
+
+                    <span class="status">Active · Direct Calling</span>
+                </div>
+
+                <div class="automation-card">
+                    <div class="card-icon">☏</div>
+                    <h3>WhatsApp Communication</h3>
+                    <p>
+                        Open WhatsApp conversations with personalized
+                        follow-up messages for your leads.
+                    </p>
+
+                    <span class="status">Active · Click to Chat</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Follow-up Reminders</h2>
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Lead Name</th>
+                            <th>Business</th>
+                            <th>Phone</th>
+                            <th>Follow-up Date</th>
+                            <th>Status</th>
+                            <th>Contact</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for lead in follow_ups %}
+
+                        <tr>
+
+                            <td>{{ lead.name }}</td>
+
+                            <td>{{ lead.business.name }}</td>
+
+                            <td>{{ lead.phone|default:"—" }}</td>
+
+                            <td>
+                                {{ lead.follow_up_at|date:"d M Y, h:i A" }}
+                            </td>
+
+                            <td>
+                                {% if lead.follow_up_at < now %}
+                                    <span class="status overdue">
+                                        Overdue
+                                    </span>
+                                {% else %}
+                                    <span class="status upcoming">
+                                        Upcoming
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="contact-actions">
+
+                                    {% if lead.call_url %}
+                                        <a href="{{ lead.call_url }}"
+                                           class="contact-btn call-btn">
+                                            ☎ Call
+                                        </a>
+                                    {% endif %}
+
+                                    {% if lead.whatsapp_url %}
+                                        <a href="{{ lead.whatsapp_url }}"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="contact-btn whatsapp-btn">
+                                            WhatsApp
+                                        </a>
+                                    {% endif %}
+
+                                    {% if not lead.call_url and not lead.whatsapp_url %}
+                                        <span style="color: var(--muted);">
+                                            No phone
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <form method="POST"
+                                      action="{% url 'complete_follow_up' lead.id %}"
+                                      onsubmit="return confirm('Mark this follow-up as completed?');">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="complete-btn">
+                                        Mark Completed
+                                    </button>
+
+                                </form>
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="7">
+
+                                <div class="empty-state">
+                                    <h3>No Pending Follow-ups</h3>
+                                    <p>
+                                        Your pending reminders will appear here.
+                                        Add a follow-up date to a lead to get started.
+                                    </p>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

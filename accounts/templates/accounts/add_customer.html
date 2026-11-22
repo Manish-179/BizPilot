@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BizPilot | Add Customer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0b1220;
+    --panel: #111d30;
+    --teal: #12bfae;
+    --teal-light: #52e5d0;
+    --text: #f4f7fc;
+    --muted: #91a1b8;
+    --border: #29394f;
+    --card: #142238;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 255px;
+    background: #0e192b;
+    border-right: 1px solid var(--border);
+    padding: 30px 18px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin: 5px 5px 55px;
+    color: white;
+    text-shadow: 2px 3px 0 #52647b, 4px 5px 8px #000;
+}
+
+.logo span {
+    color: var(--teal);
+    text-shadow: 2px 3px 0 #087b72, 4px 5px 8px #000;
+}
+
+.nav-heading {
+    color: #71869e;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin: 0 12px 15px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 15px;
+    margin-bottom: 7px;
+    color: #b7c4d5;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: .25s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: white;
+    background: linear-gradient(110deg, #0d827b, #125b61);
+    box-shadow: 0 5px 18px #0cb9a322;
+}
+
+.nav-icon {
+    font-size: 18px;
+    width: 23px;
+}
+
+.nav-section {
+    margin-top: 30px;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-top: 25px;
+    border-top: 1px solid var(--border);
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 14px;
+    background: #17263b;
+    color: white;
+    border: 1px solid #34475f;
+    border-radius: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+    transition: .25s;
+}
+
+.logout-btn:hover {
+    background: #b83245;
+    border-color: #b83245;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+    padding: 35px 42px;
+    background:
+        radial-gradient(circle at 95% 5%, #0b625b22, transparent 28%),
+        var(--navy);
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    gap: 15px;
+}
+
+.eyebrow {
+    color: var(--teal-light);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.page-title {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.back-link {
+    color: var(--teal-light);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.back-link:hover {
+    color: white;
+}
+
+.form-card {
+    max-width: 950px;
+    background: linear-gradient(145deg, #172940, #111d30);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 32px;
+    box-shadow: 0 10px 30px #0002;
+}
+
+.form-heading {
+    margin-bottom: 28px;
+}
+
+.form-heading h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 9px;
+}
+
+.form-heading p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 23px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    color: #dce6f3;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 14px 15px;
+    background: #0e192b;
+    border: 1px solid #34475f;
+    border-radius: 9px;
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: .2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px #12bfae18;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+    color: #71869e;
+}
+
+.field select option {
+    background: #111d30;
+    color: white;
+}
+
+.field textarea {
+    min-height: 115px;
+    resize: vertical;
+}
+
+.errors {
+    color: #ff8585;
+    font-size: 12px;
+    list-style: none;
+}
+
+.form-errors {
+    color: #ff8585;
+    background: #b8324522;
+    border: 1px solid #b8324566;
+    border-radius: 9px;
+    padding: 13px;
+    margin-bottom: 22px;
+    font-size: 13px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 13px;
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 24px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #17263b;
+    color: white;
+    border: 1px solid #34475f;
+}
+
+.cancel-btn:hover {
+    border-color: var(--teal);
+}
+
+.save-btn {
+    background: linear-gradient(110deg, #12bfae, #52e5d0);
+    color: #061b1a;
+    border: none;
+}
+
+.save-btn:hover {
+    box-shadow: 0 5px 20px #12bfae55;
+}
+
+@media(max-width: 950px) {
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        padding: 28px 24px;
+    }
+}
+
+@media(max-width: 650px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 18px;
+    }
+
+    .logo {
+        margin: 0 0 20px;
+    }
+
+    .nav-heading,
+    .nav-section,
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main {
+        padding: 25px 17px;
+    }
+
+    .form-card {
+        padding: 22px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .topbar {
+        margin-bottom: 25px;
+    }
+}
+
+/* BizPilot responsive navigation and mobile layout */
+@media (max-width: 768px) {
+ html, body { width:100%; max-width:100%; overflow-x:hidden; }
+ .layout { display:block !important; width:100%; min-height:100vh; overflow-x:hidden; }
+ .sidebar { display:none !important; position:fixed !important; z-index:10020 !important; inset:0 auto 0 0 !important; width:min(290px,86vw) !important; height:100dvh !important; min-height:100dvh !important; overflow-y:auto !important; padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42); border-right:1px solid var(--border,#29394f); }
+ .layout.mobile-nav-open .sidebar { display:flex !important; }
+ .sidebar .nav-heading,.sidebar .nav-section,.sidebar .sidebar-bottom { display:block !important; }
+ .sidebar .logo { margin:4px 5px 28px !important; }
+ .mobile-nav-toggle { display:inline-flex !important; position:fixed; z-index:10030; top:12px; left:12px; width:44px; height:44px; align-items:center; justify-content:center; border:1px solid #2b5264; border-radius:12px; background:#111d30; color:#52e5d0; font-size:23px; line-height:1; box-shadow:0 6px 20px rgba(0,0,0,.28); cursor:pointer; }
+ .mobile-nav-backdrop { display:none; position:fixed; z-index:10010; inset:0; background:rgba(2,8,18,.62); }
+ .layout.mobile-nav-open .mobile-nav-backdrop { display:block; }
+ .main { width:100% !important; min-width:0 !important; max-width:100% !important; margin:0 !important; padding:72px 15px 28px !important; overflow-x:hidden; }
+ .topbar { gap:12px; flex-wrap:wrap; margin-bottom:24px !important; }
+ .page-title { font-size:clamp(22px,6vw,28px) !important; }
+ .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px !important; }
+ .stat-card { min-width:0; padding:17px !important; }
+ .toolbar { display:flex !important; flex-direction:column !important; width:100%; gap:10px !important; }
+ .toolbar input,.toolbar select,.toolbar button,input,select,textarea { max-width:100%; }
+ .section-heading { gap:12px; }
+ .table-responsive,.table-scroll,.table-container { width:100%; max-width:100%; overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+ table { min-width:720px; }
+ img,canvas,video { max-width:100%; height:auto; }
+ .main > * { max-width:100%; }
+}
+@media (max-width:420px) { .stats-grid { grid-template-columns:1fr !important; } .main { padding-left:12px !important; padding-right:12px !important; } .stat-card { padding:15px !important; } }
+@media (min-width:769px) { .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; } }
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+<button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<div class="mobile-nav-backdrop" aria-hidden="true"></div>
+
+    <aside class="sidebar">
+
+        <div class="logo">Biz<span>Pilot.</span></div>
+
+        <div class="nav-heading">WORKSPACE</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <span class="nav-icon">⌂</span> Overview
+        </a>
+
+        <a href="{% url 'business_list' %}" class="nav-link">
+            <span class="nav-icon">▦</span> My Businesses
+        </a>
+
+        <a href="{% url 'customer_list' %}" class="nav-link active">
+            <span class="nav-icon">♙</span> Customers
+        </a>
+
+        <div class="nav-section">
+
+            <div class="nav-heading">MANAGEMENT</div>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▣</span> Products
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▥</span> Analytics
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span> Settings
+            </a>
+
+        </div>
+
+        
+            <a href="{% url 'ai_chatbot' %}" class="nav-link"><span class="nav-icon">✦</span> AI Assistant</a>
+        <div class="sidebar-bottom">
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">
+                    ↪ Logout
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <div class="eyebrow">BUSINESS WORKSPACE</div>
+                <h1 class="page-title">Add Customer</h1>
+            </div>
+
+            <a href="{% url 'customer_list' %}" class="back-link">
+                ← Back to Customers
+            </a>
+
+        </header>
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                <h2>Customer Information</h2>
+                <p>Add a new customer and associate them with one of your businesses.</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-grid">
+
+                    {% for field in form %}
+
+                        <div class="field {% if field.name == 'address' %}full{% endif %}">
+
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="errors">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="form-actions">
+
+                    <a href="{% url 'customer_list' %}" class="btn cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn save-btn">
+                        Save Customer →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

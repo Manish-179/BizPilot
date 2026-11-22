@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Automatic Reply | BizPilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b1220;
+            color: #f4f7fc;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 255px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0e192b;
+            border-right: 1px solid #29394f;
+            padding: 28px 20px;
+        }
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 42px;
+            text-shadow: 2px 3px 0 #263b53;
+        }
+        .logo span { color: #12bfae; }
+        .nav-heading {
+            color: #91a1b8;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 25px 0 12px;
+        }
+        .nav-link {
+            display: block;
+            color: #91a1b8;
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 9px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #52e5d0;
+            background: linear-gradient(90deg, #123b43, #142238);
+        }
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+        }
+        .logout button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #29394f;
+            border-radius: 9px;
+            background: #142238;
+            color: #f4f7fc;
+            cursor: pointer;
+        }
+        .main {
+            margin-left: 255px;
+            padding: 35px 42px;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+        .eyebrow {
+            color: #12bfae;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+        h1 { font-size: 30px; margin-bottom: 10px; }
+        .muted { color: #91a1b8; font-size: 14px; line-height: 1.6; }
+        .back {
+            color: #52e5d0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .form-card {
+            max-width: 750px;
+            background: linear-gradient(145deg, #142238, #111d30);
+            border: 1px solid #29394f;
+            border-radius: 16px;
+            padding: 30px;
+        }
+        .field { margin-bottom: 22px; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+        input:not([type="checkbox"]), select, textarea {
+            width: 100%;
+            padding: 13px 14px;
+            background: #0b1220;
+            color: #f4f7fc;
+            border: 1px solid #29394f;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #12bfae;
+        }
+        textarea { resize: vertical; min-height: 130px; }
+        input[type="checkbox"] { accent-color: #12bfae; }
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #91a1b8;
+            font-size: 14px;
+        }
+        .errorlist {
+            color: #ff8585;
+            font-size: 12px;
+            margin-top: 7px;
+            list-style: none;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+        .save {
+            border: none;
+            border-radius: 9px;
+            padding: 13px 22px;
+            background: linear-gradient(90deg, #12bfae, #52e5d0);
+            color: #0b1220;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .cancel {
+            padding: 13px 22px;
+            border: 1px solid #29394f;
+            border-radius: 9px;
+            color: #f4f7fc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        @media(max-width: 950px) {
+            .sidebar { width: 220px; }
+            .main { margin-left: 220px; padding: 28px; }
+        }
+        @media(max-width: 650px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 22px 16px; }
+            .form-card { padding: 20px; }
+            h1 { font-size: 25px; }
+        }
+    
+/* BizPilot responsive mobile navigation */
+.mobile-nav-toggle,.mobile-nav-backdrop{display:none}
+@media(max-width:768px){
+ body{overflow-x:hidden}
+ .sidebar{display:none;position:fixed;z-index:10020;inset:0 auto 0 0;width:min(290px,86vw);height:100dvh;overflow-y:auto;box-shadow:18px 0 45px rgba(0,0,0,.42)}
+ body.mobile-nav-open .sidebar{display:block}
+ .mobile-nav-toggle{display:inline-flex;position:fixed;z-index:10030;top:12px;left:12px;width:44px;height:44px;align-items:center;justify-content:center;border:1px solid #2b5264;border-radius:12px;background:#111d30;color:#52e5d0;font-size:23px;cursor:pointer}
+ .mobile-nav-backdrop{display:none;position:fixed;z-index:10010;inset:0;background:rgba(2,8,18,.62)}
+ body.mobile-nav-open .mobile-nav-backdrop{display:block}
+ .main{margin-left:0!important;width:100%;padding:72px 15px 28px!important;overflow-x:hidden}
+ .form-card{width:100%;padding:20px}
+}
+@media(min-width:769px){.mobile-nav-toggle,.mobile-nav-backdrop{display:none!important}}
+
+
+/* Reliable shared mobile navigation */
+.mobile-nav-toggle { display:none; }
+.mobile-nav-backdrop { display:none; }
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display:flex !important; position:fixed !important; top:12px !important; left:12px !important;
+    z-index:10050 !important; width:44px !important; height:44px !important;
+    align-items:center !important; justify-content:center !important;
+    border:1px solid #2b5264 !important; border-radius:12px !important;
+    background:#111d30 !important; color:#52e5d0 !important; font-size:24px !important;
+    cursor:pointer !important; box-shadow:0 6px 20px rgba(0,0,0,.3) !important;
+  }
+  .mobile-nav-backdrop {
+    display:none; position:fixed !important; inset:0 !important;
+    z-index:10030 !important; background:rgba(2,8,18,.68) !important;
+  }
+  .layout.mobile-nav-open .mobile-nav-backdrop { display:block !important; }
+  .layout .sidebar {
+    display:none !important; position:fixed !important; inset:0 auto 0 0 !important;
+    z-index:10040 !important; width:min(290px,86vw) !important;
+    height:100dvh !important; max-height:100dvh !important; overflow-y:auto !important;
+    padding:24px 16px 30px !important; box-shadow:18px 0 45px rgba(0,0,0,.42) !important;
+  }
+  .layout.mobile-nav-open .sidebar { display:flex !important; }
+  .layout .main {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    margin-left:0 !important; margin-right:0 !important;
+    padding:72px 14px 28px !important; overflow-x:hidden !important;
+  }
+  .layout { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+}
+@media (min-width:769px) {
+  .mobile-nav-toggle,.mobile-nav-backdrop { display:none !important; }
+}
+
+</style>
+</head>
+<body>
+<button type="button" class="mobile-nav-toggle" aria-label="Open navigation">☰</button>
+<div class="mobile-nav-backdrop"></div>
+
+<aside class="sidebar">
+    <div class="logo">Biz<span>Pilot.</span></div>
+
+    <div class="nav-heading">WORKSPACE</div>
+    <a class="nav-link" href="{% url 'dashboard' %}">Overview</a>
+    <a class="nav-link" href="{% url 'business_list' %}">My Businesses</a>
+    <a class="nav-link" href="{% url 'customer_list' %}">Customers</a>
+    <a class="nav-link" href="{% url 'lead_list' %}">Leads</a>
+    <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+    <a class="nav-link" href="{% url 'brand_list' %}">Brand Setup</a>
+
+    <div class="nav-heading">MANAGEMENT</div>
+    <a class="nav-link active" href="{% url 'automation' %}">Automation</a>
+    <a class="nav-link active" href="{% url 'auto_reply_list' %}">Automatic Replies</a>
+
+    <form class="logout" method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</aside>
+
+<main class="main">
+    <div class="topbar">
+        <div>
+            <div class="eyebrow">AUTOMATION / AUTOMATIC REPLIES</div>
+            <h1>Create Automatic Reply</h1>
+            <p class="muted">Configure a response for incoming customer enquiries.</p>
+        </div>
+        <a class="back" href="{% url 'auto_reply_list' %}">← Back to Replies</a>
+    </div>
+
+    <div class="form-card">
+        <form method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="field">
+                    {% if field.name == "is_active" %}
+                        <div class="checkbox-row">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        </div>
+                    {% else %}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                    {% endif %}
+
+                    {% if field.help_text %}
+                        <p class="muted">{{ field.help_text }}</p>
+                    {% endif %}
+
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+
+            <div class="actions">
+                <button class="save" type="submit">Save Automatic Reply</button>
+                <a class="cancel" href="{% url 'auto_reply_list' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+
+<script>
+(function(){
+ const toggle=document.querySelector('.mobile-nav-toggle'),backdrop=document.querySelector('.mobile-nav-backdrop'),sidebar=document.querySelector('.sidebar');
+ if(!toggle||!sidebar)return;
+ function close(){document.body.classList.remove('mobile-nav-open');toggle.textContent='☰';}
+ toggle.addEventListener('click',function(){const open=document.body.classList.toggle('mobile-nav-open');toggle.textContent=open?'×':'☰';});
+ backdrop.addEventListener('click',close);
+ sidebar.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ document.querySelectorAll('.main table').forEach(function(table){
+  if(!table.parentElement.classList.contains('mobile-table-scroll')){
+   var wrapper=document.createElement('div');wrapper.className='mobile-table-scroll';
+   table.parentNode.insertBefore(wrapper,table);wrapper.appendChild(table);
+  }
+ });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('.mobile-nav-toggle');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var sidebar = document.querySelector('.sidebar');
+  if (!layout || !toggle || !sidebar) return;
+
+  function closeMenu() {
+    layout.classList.remove('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    toggle.textContent = '☰';
+  }
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var isOpen = layout.classList.toggle('mobile-nav-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    toggle.textContent = isOpen ? '×' : '☰';
+  });
+  if (backdrop) backdrop.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) closeMenu();
+  });
+});
+</script>
+
+</body>
+</html>

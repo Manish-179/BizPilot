@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ business.name }} | Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: {{ brand.primary_color }};
+            --secondary: {{ brand.secondary_color }};
+            --bg: #0b1220;
+            --panel: #111d30;
+            --card: #142238;
+            --text: #f4f7fc;
+            --muted: #91a1b8;
+            --border: #29394f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top right, rgba(18,191,174,.12), transparent 35%), var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .navbar {
+            min-height: 78px;
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid var(--border);
+            background: #0e192b;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #071923;
+            font-weight: 800;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 12px 20px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #071923;
+            font-size: 13px;
+            font-weight: 800;
+            transition: .25s;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(18,191,174,.2);
+        }
+
+        .hero {
+            padding: 75px 7%;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            background:
+                linear-gradient(90deg, rgba(11,18,32,.96), rgba(11,18,32,.65)),
+                linear-gradient(135deg, #142238, #0b1220);
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 5vw, 55px);
+            font-weight: 800;
+            max-width: 750px;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            color: #c1ccdc;
+            max-width: 600px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .enquiry-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 14px 23px;
+            border-radius: 9px;
+            color: #071923;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 13px;
+            font-weight: 800;
+            transition: .25s;
+        }
+
+        .enquiry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(18,191,174,.25);
+        }
+
+        /* WHATSAPP AND CALL BUTTONS */
+
+        .contact-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 13px 21px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #17263b;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 800;
+            transition: .25s;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .whatsapp-btn {
+            background: #075e45;
+            border-color: #128c65;
+            color: white;
+        }
+
+        .whatsapp-btn:hover {
+            background: #087c5b;
+        }
+
+        .call-btn:hover {
+            background: #125b61;
+        }
+
+        .section {
+            padding: 65px 7%;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+            gap: 22px;
+        }
+
+        .product-card {
+            overflow: hidden;
+            background: linear-gradient(145deg, #142238, #101c2e);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            transition: .25s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 30px rgba(0,0,0,.22);
+        }
+
+        .product-image {
+            height: 225px;
+            background: #0e192b;
+            display: grid;
+            place-items: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-image {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .product-info {
+            padding: 21px;
+        }
+
+        .category {
+            display: inline-block;
+            color: var(--primary);
+            background: rgba(18,191,174,.10);
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 13px;
+        }
+
+        .product-info h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            min-height: 44px;
+            margin-bottom: 18px;
+        }
+
+        .price {
+            color: var(--primary);
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .empty-state {
+            padding: 55px 20px;
+            text-align: center;
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+            background: var(--panel);
+            color: var(--muted);
+        }
+
+        .empty-state h3 {
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        footer {
+            padding: 27px 7%;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 14px 5%;
+                flex-wrap: wrap;
+            }
+
+            .brand {
+                font-size: 17px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 10px 13px;
+                font-size: 11px;
+            }
+
+            .hero,
+            .section {
+                padding: 45px 5%;
+            }
+
+            .section-heading h2 {
+                font-size: 23px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image {
+                height: 240px;
+            }
+
+            .contact-actions {
+                width: 100%;
+            }
+
+            .contact-btn {
+                text-align: center;
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    
+    <nav class="navbar">
+
+        <div class="brand">
+            {% if brand.logo %}
+                <img src="{{ brand.logo.url }}" alt="{{ business.name }} logo">
+            {% else %}
+                <div class="brand-icon">{{ business.name|first|upper }}</div>
+            {% endif %}
+
+            <span>{{ business.name }}</span>
+        </div>
+
+        <div class="nav-actions">
+            <a href="#products" class="nav-link">Explore Products</a>
+
+            <a href="{% url 'storefront_enquiry' business.id %}" class="nav-link">
+                Send Enquiry
+            </a>
+        </div>
+
+    </nav>
+
+    
+    <section class="hero"
+        {% if brand.banner %}
+            style="background-image: linear-gradient(90deg, rgba(11,18,32,.96), rgba(11,18,32,.65)), url('{{ brand.banner.url }}');"
+        {% endif %}>
+
+        <div class="eyebrow">Welcome to our store</div>
+
+        <h1>{{ business.name }}</h1>
+
+        <p>
+            {% if brand.tagline %}
+                {{ brand.tagline }}
+            {% else %}
+                Discover our products and explore what we have to offer.
+            {% endif %}
+        </p>
+
+        <a href="{% url 'storefront_enquiry' business.id %}" class="enquiry-btn">
+            Send an Enquiry →
+        </a>
+
+        
+        {% if business.phone %}
+            <div class="contact-actions">
+
+                {% if whatsapp_number %}
+                    <a href="https://wa.me/{{ whatsapp_number }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="contact-btn whatsapp-btn">
+                        WhatsApp Us
+                    </a>
+                {% endif %}
+
+                <a href="tel:{{ business.phone }}"
+                   class="contact-btn call-btn">
+                    Call Now
+                </a>
+
+            </div>
+        {% endif %}
+
+    </section>
+
+    
+    <section class="section" id="products">
+
+        <div class="section-heading">
+            <div>
+                <h2>Our Products</h2>
+                <p>Explore our latest products and collections.</p>
+            </div>
+        </div>
+
+        {% if products %}
+
+            <div class="product-grid">
+
+                {% for product in products %}
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <span class="no-image">No image available</span>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="product-info">
+
+                            <span class="category">
+                                {{ product.get_category_display }}
+                            </span>
+
+                            <h3>{{ product.name }}</h3>
+
+                            <p class="description">
+                                {{ product.description|default:"Discover more about this product."|truncatewords:18 }}
+                            </p>
+
+                            <div class="price">
+                                ₹{{ product.price }}
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+                <h3>No products available yet</h3>
+                <p>New products will appear here soon.</p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    
+    <footer>
+        © {% now "Y" %} {{ business.name }}. All rights reserved.
+        <br>
+        Powered by BizPilot
+    </footer>
+
+</body>
+</html>

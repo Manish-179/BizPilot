@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Business | BizPilot</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dcebe2, #f3f2eb, #dce8ef);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #172d3b;
+        }
+
+        .container {
+            background: white;
+            max-width: 480px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(23, 45, 59, 0.10);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .logo span {
+            color: #a8c99c;
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 18px;
+            font-size: 28px;
+        }
+
+        p {
+            color: #718092;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .business-name {
+            color: #172d3b;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        button,
+        .cancel {
+            padding: 13px 20px;
+            border: none;
+            border-radius: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        button {
+            background: #b42318;
+            color: white;
+        }
+
+        button:hover {
+            background: #941b13;
+        }
+
+        .cancel {
+            background: #eaf1e6;
+            color: #456d48;
+        }
+
+        .cancel:hover {
+            background: #dcebd5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">Biz<span>Pilot</span></div>
+
+        <div class="icon">⚠️</div>
+
+        <h1>Delete Business?</h1>
+
+        <p>
+            Are you sure you want to delete
+            <span class="business-name">{{ business.name }}</span>?
+            This action cannot be undone.
+        </p>
+
+        <div class="actions">
+
+            <a href="{% url 'business_list' %}" class="cancel">
+                Cancel
+            </a>
+
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit">Yes, Delete</button>
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
