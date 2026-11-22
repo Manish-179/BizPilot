@@ -11,9 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
           
-SECRET_KEY = 'django-insecure-REPLACE-THIS-WITH-A-NEW-SECRET-KEY'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "dev-only-key-change-before-deployment"
+)
 
 
                         
